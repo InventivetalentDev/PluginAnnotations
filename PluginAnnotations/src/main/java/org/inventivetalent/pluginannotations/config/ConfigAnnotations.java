@@ -5,6 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ConfigAnnotations {
 
@@ -45,6 +47,14 @@ public class ConfigAnnotations {
 						if (annotation.colorChar() != ' ') {
 							if (value instanceof String) {
 								value = ChatColor.translateAlternateColorCodes(annotation.colorChar(), (String) value);
+							}
+							if (value instanceof List) {
+								for (ListIterator iterator = ((List) value).listIterator(); iterator.hasNext(); ) {
+									Object next = iterator.next();
+									if (next instanceof String) {
+										iterator.set(ChatColor.translateAlternateColorCodes(annotation.colorChar(), (String) next));
+									}
+								}
 							}
 						}
 						field.set(classToLoad, value);
