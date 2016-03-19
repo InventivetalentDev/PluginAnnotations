@@ -1,5 +1,6 @@
 package org.inventivetalent.pluginannotations.config;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -40,7 +41,13 @@ public class ConfigAnnotations {
 				if (annotation != null) {
 					field.setAccessible(true);
 					if (config.contains(annotation.path())) {
-						field.set(classToLoad, config.get(annotation.path()));
+						Object value = config.get(annotation.path());
+						if (annotation.colorChar() != ' ') {
+							if (value instanceof String) {
+								value = ChatColor.translateAlternateColorCodes(annotation.colorChar(), (String) value);
+							}
+						}
+						field.set(classToLoad, value);
 					} else if (!annotation.defaultsTo().isEmpty()) {
 						//TODO: Parse value type
 						field.set(classToLoad, annotation.defaultsTo());

@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 
 	String defaultsTo() default "";
 
+	char colorChar() default ' ';
+
 }
