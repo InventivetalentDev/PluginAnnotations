@@ -57,7 +57,7 @@ public class MessageLoader {
 	@Nullable
 	public String getMessage(@Nonnull String key, @Nullable String def, boolean allowLinks, char colorChar, @Nullable MessageFormatter formatter) {
 		if (configuration.contains(key)) {
-			String message = getMessage(key, def == null || def.isEmpty() ? null : def);
+			String message = getMessage0(key, def == null || def.isEmpty() ? null : def);
 			if (allowLinks) {
 				message = replaceLinks(message);
 			}
@@ -81,6 +81,10 @@ public class MessageLoader {
 	}
 
 	public String getMessage(@Nonnull String key, @Nullable String def) {
+		return getMessage(key, def, true, '&', (MessageFormatter) null);
+	}
+
+	protected String getMessage0(@Nonnull String key, @Nullable String def) {
 		return def != null ? configuration.getString(key, def) : configuration.getString(key);
 	}
 
@@ -97,7 +101,7 @@ public class MessageLoader {
 			String toReplace = matcher.group(0);
 			String key = matcher.group(1);
 
-			message = message.replace(toReplace, getMessage(key, null));
+			message = message.replace(toReplace, getMessage0(key, null));
 		}
 		return message;
 	}
