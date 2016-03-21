@@ -104,9 +104,11 @@ public class MessageLoader {
 			String toReplace = matcher.group(0);
 			String key = matcher.group(1);
 
-			key = makeKey(key);
-			if (configuration.contains(key)) {
-				message = message.replace(toReplace, getMessage0(makeKey(key), null));
+			String fullKey = makeKey(key);
+			if (configuration.contains(fullKey)) {
+				message = message.replace(toReplace, getMessage0(fullKey, null));
+			} else if (configuration.contains(key)) {
+				message = message.replace(toReplace, getMessage0(key, null));
 			}
 		}
 		return message;
