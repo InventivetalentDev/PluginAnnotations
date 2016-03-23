@@ -26,16 +26,20 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+import org.bukkit.entity.Player;
+import org.inventivetalent.pluginannotations.command.Command;
+import org.inventivetalent.pluginannotations.command.OptionalArg;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+public class CommandTest {
 
-public class PluginAnnotations {
+	@Command
+	public void myCommand(Player player) {
+		System.out.println("myCommand( " + player + " )");
+	}
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+	@Command(usage = "<required> [optional]")
+	public void optionalTest(Player player, String required, @OptionalArg String optional) {
+		System.out.println("optionalTest( " + player + ", " + required + ", " + optional + " )");
+	}
 
 }

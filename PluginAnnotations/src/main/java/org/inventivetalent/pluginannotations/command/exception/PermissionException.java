@@ -26,16 +26,17 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command.exception;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+public class PermissionException extends CommandException {
 
-public class PluginAnnotations {
+	private String permission;
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+	public PermissionException(String permission) {
+		this.permission = permission;
+	}
 
+	public String getPermission() {
+		return permission;
+	}
 }

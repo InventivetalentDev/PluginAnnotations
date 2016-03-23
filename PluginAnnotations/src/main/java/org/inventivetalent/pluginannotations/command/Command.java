@@ -26,16 +26,44 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class PluginAnnotations {
+@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD) public @interface Command {
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+	/**
+	 * Name of the command. If left empty, the method name is used
+	 */
+	String name() default "";
+
+	/**
+	 * Command aliases
+	 */
+	String[] aliases() default {};
+
+	String usage() default "";
+
+	String description() default "";
+
+	/**
+	 * Minimum argument length
+	 */
+	int min() default 0;
+
+	/**
+	 * Maximum argument length (-1 for no limitation)
+	 */
+	int max() default -1;
+
+	//	/**
+	//	 * Whether to allow the console (non-players) as the command sender
+	//	 */
+	//	boolean allowConsole() default true;
+
+	Class<? extends CommandErrorHandler> errorHandler() default FeedbackErrorHandler.class;
 
 }

@@ -26,16 +26,18 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command.exception;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+public class UnhandledCommandException extends CommandException {
+	public UnhandledCommandException(String message) {
+		super(message);
+	}
 
-public class PluginAnnotations {
+	public UnhandledCommandException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
-
+	public UnhandledCommandException(Throwable cause) {
+		super(cause);
+	}
 }

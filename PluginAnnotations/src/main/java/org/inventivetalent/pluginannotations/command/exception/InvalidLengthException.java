@@ -26,16 +26,24 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command.exception;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+public class InvalidLengthException extends CommandException {
 
-public class PluginAnnotations {
+	private int expected;
+	private int given;
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+	public InvalidLengthException(int expected, int given) {
+		super((given < expected ? "Missing" : "Too many") + " arguments. (" + given + (given < expected ? "<" : ">") + expected + ")");
+		this.expected = expected;
+		this.given = given;
+	}
 
+	public int getExpectedLength() {
+		return expected;
+	}
+
+	public int getGivenLength() {
+		return given;
+	}
 }

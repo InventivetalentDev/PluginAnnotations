@@ -26,16 +26,47 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+import org.bukkit.plugin.Plugin;
 
-public class PluginAnnotations {
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+public class CommandAnnotations {
+
+	public Set<AnnotatedCommand> registerCommands(Plugin plugin, Object classToRegister) {
+		Class<?> clazz = classToRegister.getClass();
+		Set<AnnotatedCommand> registeredCommands = new HashSet<>();
+
+		Set<Method> completionMethods = new HashSet<>();
+		for (Method method : clazz.getDeclaredMethods()) {
+			Completion completionAnnotation = method.getAnnotation(Completion.class);
+			if (completionAnnotation != null) { completionMethods.add(method); }
+		}
+
+		for (Method method : clazz.getDeclaredMethods()) {
+			Command commandAnnotation = method.getAnnotation(Command.class);
+			if (commandAnnotation == null) {
+				continue;
+			}
+			Permission permissionAnnotation = method.getAnnotation(Permission.class);
+
+			Method completionMethod = null;
+			Completion completionAnnotation = null;
+			for (Method method1 : completionMethods) {
+				if (method1.getName().equals(method.getName())) {
+					completionMethod = method1;
+					completionAnnotation = method1.getAnnotation(Completion.class);
+				}
+			}
+
+			AnnotatedCommand annotatedCommand = new AnnotatedCommand(classToRegister, method, commandAnnotation, permissionAnnotation, completionMethod, completionAnnotation);
+			registeredCommands.add(annotatedCommand.register());
+		}
+
+		return registeredCommands;
+	}
 
 }

@@ -26,16 +26,33 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.pluginannotations;
+package org.inventivetalent.pluginannotations.command;
 
-import org.inventivetalent.pluginannotations.command.CommandAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
-import org.inventivetalent.pluginannotations.message.MessageAnnotations;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.inventivetalent.pluginannotations.command.exception.*;
 
-public class PluginAnnotations {
+public class CommandErrorHandler {
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
-	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
-	public static final CommandAnnotations COMMAND = new CommandAnnotations();
+	public static final Class<? extends CommandErrorHandler> VOID     = VoidErrorHandler.class;
+	public static final Class<? extends CommandErrorHandler> FEEDBACK = FeedbackErrorHandler.class;
+
+	public void handleCommandException(CommandException exception, CommandSender sender, Command command, String[] args) {
+	}
+
+	public void handlePermissionException(PermissionException exception, CommandSender sender, Command command, String[] args) {
+	}
+
+	public void handleIllegalSender(IllegalSenderException exception, CommandSender sender, Command command, String[] args) {
+	}
+
+	public void handleUnhandled(UnhandledCommandException exception, CommandSender sender, Command command, String[] args) {
+	}
+
+	public void handleLength(InvalidLengthException exception, CommandSender sender, Command command, String[] args) {
+	}
+
+	public void handleArgumentParse(ArgumentParseException exception, CommandSender sender, Command command, String[] args) {
+	}
 
 }
