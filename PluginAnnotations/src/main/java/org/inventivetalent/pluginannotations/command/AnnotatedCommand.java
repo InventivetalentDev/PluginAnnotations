@@ -132,6 +132,19 @@ public class AnnotatedCommand {
 
 				Object[] parsedArguments = new Object[parameterTypes.length];
 				for (int i = 1; i < args.length + 1; i++) {
+					System.out.println(i);
+					System.out.println(parameterTypes.length);
+					if (i == parameterTypes.length - 1) {
+						JoinedArg joinedAnnotation = parameterTypes[parameterTypes.length - 1]/* use the last parameter */.getAnnotation(JoinedArg.class);
+						if (joinedAnnotation != null) {
+							parsedArguments[parsedArguments.length - 1] = joinArguments(args, i - 1, joinedAnnotation.joiner());
+							break;//Break, since we can't use any other arguments
+						} else if (String[].class.isAssignableFrom(parameterTypes[parameterTypes.length - 1])) {//Always use the last parameter
+							parsedArguments[parsedArguments.length - 1] = getLeftoverArguments(args, i - 1);
+							break;
+						}
+					}
+
 					parsedArguments[i] = parseArgument(parameterTypes[i], args[i - 1]);
 				}
 				parsedArguments[0] = sender;
@@ -203,8 +216,6 @@ public class AnnotatedCommand {
 	}
 
 	boolean hasPermission(CommandSender sender) {
-		System.out.println("Annotation: " + permissionAnnotation);
-		System.out.println("Permission: " + permission);
 		return permissionAnnotation == null || sender.hasPermission(permission);
 	}
 
@@ -227,6 +238,25 @@ public class AnnotatedCommand {
 		} catch (ReflectiveOperationException e) {
 			throw new ArgumentParseException("Exception while parsing argument '" + argument + "' to " + parameterType, e, argument, parameterType);
 		}
+	}
+
+	String joinArguments(String[] args, int start, String joiner) {
+		if (start > args.length) { throw new IllegalArgumentException("start > length"); }
+
+		StringBuilder joined = new StringBuilder();
+		for (int i = start; i < args.length; i++) {
+			if (i != start) { joined.append(joiner); }
+			joined.append(args[i]);
+		}
+		return joined.toString();
+	}
+
+	String[] getLeftoverArguments(String[] args, int start) {
+		String[] newArray = new String[args.length - start];
+		for (int i = start; i < args.length; i++) {
+			newArray[i - start] = args[i];
+		}
+		return newArray;
 	}
 
 	//Internal register methods and classes
