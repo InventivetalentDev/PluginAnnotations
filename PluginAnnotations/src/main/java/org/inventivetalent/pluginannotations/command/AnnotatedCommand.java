@@ -37,6 +37,7 @@ import org.inventivetalent.pluginannotations.command.exception.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class AnnotatedCommand {
 				Object[] parsedArguments = new Object[parameterTypes.length];
 				for (int i = 1; i < args.length + 1; i++) {
 					if (i == parameterTypes.length - 1) {
-						JoinedArg joinedAnnotation = parameterTypes[parameterTypes.length - 1]/* use the last parameter */.getAnnotation(JoinedArg.class);
+						JoinedArg joinedAnnotation = getMethodParameterAnnotation(commandMethod, parameterTypes.length - 1, JoinedArg.class);
 						if (joinedAnnotation != null) {
 							parsedArguments[parsedArguments.length - 1] = joinArguments(args, i - 1, joinedAnnotation.joiner());
 							break;//Break, since we can't use any other arguments
@@ -149,6 +150,18 @@ public class AnnotatedCommand {
 					parsedArguments[i] = parseArgument(parameterTypes[i], args[i - 1]);
 				}
 				parsedArguments[0] = sender;
+
+				if (parameterTypes.length - 1 > args.length) {
+					for (int i = args.length; i < parameterTypes.length; i++) {
+						if (parsedArguments[i] != null) { continue; }
+						OptionalArg optionalAnnotation = getMethodParameterAnnotation(commandMethod, i, OptionalArg.class);
+						if (optionalAnnotation != null) {
+							if (optionalAnnotation.def() != null && !optionalAnnotation.def().isEmpty()) {
+								parsedArguments[i] = parseArgument(parameterTypes[i], optionalAnnotation.def());
+							}
+						}
+					}
+				}
 
 				commandMethod.invoke(commandClass, parsedArguments);
 			} catch (InvocationTargetException e) {
@@ -219,6 +232,28 @@ public class AnnotatedCommand {
 		return false;
 	}
 
+	<A extends Annotation> A getMethodParameterAnnotation(Method method, int index, Class<A> clazz) {
+		Annotation[] annotations = method.getParameterAnnotations()[index];
+		if (annotations != null) {
+			for (Annotation annotation : annotations) {
+				if (clazz.isAssignableFrom(annotation.getClass())) { return (A) annotation; }
+			}
+		}
+		return null;
+	}
+
+	<A extends Annotation> A getMethodParameterAnnotation(Method method, Class<A> clazz) {
+		Annotation[][] annotations = method.getParameterAnnotations();
+		for (Annotation[] annotationA : annotations) {
+			for (Annotation annotation : annotationA) {
+				if (clazz.isAssignableFrom(annotation.getClass())) {
+					return (A) annotation;
+				}
+			}
+		}
+		return null;
+	}
+
 	List<String> onTabComplete(CommandSender sender, BukkitCommand command, String label, String[] args) {
 		if (completionAnnotation == null || completionMethod == null) { return null; }
 
@@ -247,7 +282,7 @@ public class AnnotatedCommand {
 			Object[] parsedArguments = new Object[parameterTypes.length];
 			for (int i = 2; i < args.length + 2; i++) {
 				if (i == parameterTypes.length - 1) {
-					JoinedArg joinedAnnotation = parameterTypes[parameterTypes.length - 1]/* use the last parameter */.getAnnotation(JoinedArg.class);
+					JoinedArg joinedAnnotation = getMethodParameterAnnotation(completionMethod, parameterTypes.length - 1, JoinedArg.class);
 					if (joinedAnnotation != null) {
 						parsedArguments[parsedArguments.length - 1] = joinArguments(args, i - 1, joinedAnnotation.joiner());
 						break;//Break, since we can't use any other arguments
