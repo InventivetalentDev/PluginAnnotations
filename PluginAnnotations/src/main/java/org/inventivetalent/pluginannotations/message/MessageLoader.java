@@ -84,9 +84,7 @@ public class MessageLoader {
 
 	@Nullable
 	public String getMessage(@Nonnull String key, @Nullable String def, boolean allowLinks, char colorChar, @Nullable MessageFormatter formatter) {
-		System.out.println(key);
 		key = makeKey(key);
-		System.out.println(key);
 		if (configuration.contains(key)) {
 			String message = getMessage0(key, def == null || def.isEmpty() ? null : def);
 			if (allowLinks) {
