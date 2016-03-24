@@ -40,6 +40,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AnnotatedCommand {
@@ -132,8 +133,6 @@ public class AnnotatedCommand {
 
 				Object[] parsedArguments = new Object[parameterTypes.length];
 				for (int i = 1; i < args.length + 1; i++) {
-					System.out.println(i);
-					System.out.println(parameterTypes.length);
 					if (i == parameterTypes.length - 1) {
 						JoinedArg joinedAnnotation = parameterTypes[parameterTypes.length - 1]/* use the last parameter */.getAnnotation(JoinedArg.class);
 						if (joinedAnnotation != null) {
@@ -144,6 +143,7 @@ public class AnnotatedCommand {
 							break;
 						}
 					}
+					if (i >= parsedArguments.length) { break; }
 
 					parsedArguments[i] = parseArgument(parameterTypes[i], args[i - 1]);
 				}
@@ -201,18 +201,86 @@ public class AnnotatedCommand {
 		return false;
 	}
 
-	//TODO
 	List<String> onTabComplete(CommandSender sender, BukkitCommand command, String label, String[] args) {
-		if (completionAnnotation == null) { return null; }
+		if (completionAnnotation == null || completionMethod == null) { return null; }
 
-		//		if (!commandAnnotation.allowConsole()) {
-		//			if (!(sender instanceof Player)) { return null; }
-		//		}
 		if (!hasPermission(sender)) {
 			return null;
 		}
+		try {
+			//			if (!List.class.isAssignableFrom(completionMethod.getReturnType())) {
+			//				throw new CommandException("Completion method '" + completionMethod.getName() + " in " + commandClass + " does not return a List");
+			//			}
 
-		return null;
+			Class<?>[] parameterTypes = completionMethod.getParameterTypes();
+			if (parameterTypes.length <= 1) {
+				throw new CommandException("Completion method '" + completionMethod.getName() + " in " + commandClass + " is missing the List or CommandSender parameter");
+			}
+			if (!List.class.isAssignableFrom(parameterTypes[0])) {
+				throw new CommandException("First parameter of method '" + completionMethod.getName() + " in " + completionMethod + " is no List");
+			}
+			if (!CommandSender.class.isAssignableFrom(parameterTypes[1])) {
+				throw new CommandException("Second parameter of method '" + completionMethod.getName() + " in " + completionMethod + " is no CommandSender");
+			}
+			if (Player.class.isAssignableFrom(parameterTypes[0])) {
+				if (!(sender instanceof Player)) { return null; }
+			}
+
+			Object[] parsedArguments = new Object[parameterTypes.length];
+			for (int i = 2; i < args.length + 2; i++) {
+				if (i == parameterTypes.length - 1) {
+					JoinedArg joinedAnnotation = parameterTypes[parameterTypes.length - 1]/* use the last parameter */.getAnnotation(JoinedArg.class);
+					if (joinedAnnotation != null) {
+						parsedArguments[parsedArguments.length - 1] = joinArguments(args, i - 1, joinedAnnotation.joiner());
+						break;//Break, since we can't use any other arguments
+					} else if (String[].class.isAssignableFrom(parameterTypes[parameterTypes.length - 1])) {//Always use the last parameter
+						parsedArguments[parsedArguments.length - 1] = getLeftoverArguments(args, i - 1);
+						break;
+					}
+				}
+
+				if (i >= parsedArguments.length) { break; }
+				if (args[i - 2] == null || args[i - 2].isEmpty()) {
+					parsedArguments[i] = null;
+				} else {
+					try {
+						parsedArguments[i] = parseArgument(parameterTypes[i], args[i - 2]);
+					} catch (Exception e) {
+						//Ignore exceptions for tab-completion
+					}
+				}
+			}
+			List<String> list = (List) (parsedArguments[0] = new ArrayList<>());
+			parsedArguments[1] = sender;
+
+			completionMethod.invoke(commandClass, parsedArguments);
+			return getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));
+		} catch (CommandException commandException) {
+			throw commandException;
+		} catch (Throwable throwable) {
+			throw new UnhandledCommandException("Unhandled exception in " + this.commandClass + "#" + this.completionMethod.getName(), throwable);
+		}
+	}
+
+	/**
+	 * @author D4rKDeagle
+	 */
+	public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilities) {
+		final String argumentToFindCompletionFor = args[args.length - 1];
+
+		final List<String> listOfPossibleCompletions = new ArrayList<>();
+		for (int i = 0; i < possibilities.length; i++) {
+			try {
+				if (possibilities[i] != null && possibilities[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
+					listOfPossibleCompletions.add(possibilities[i]);
+				}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		Collections.sort(listOfPossibleCompletions);
+
+		return listOfPossibleCompletions;
 	}
 
 	boolean hasPermission(CommandSender sender) {
@@ -232,7 +300,11 @@ public class AnnotatedCommand {
 				return parameterType.getDeclaredMethod("parse" + parseName, String.class).invoke(null, argument);
 			}
 			if (Enum.class.isAssignableFrom(parameterType)) {
-				return Enum.valueOf((Class<? extends Enum>) parameterType, argument.toUpperCase());
+				try {
+					return Enum.valueOf((Class<? extends Enum>) parameterType, argument.toUpperCase());
+				} catch (Exception e) {
+					//Ignore the exception - no enum constant found
+				}
 			}
 			throw new ArgumentParseException("Failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
 		} catch (ReflectiveOperationException e) {
