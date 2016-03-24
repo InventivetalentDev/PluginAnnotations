@@ -46,4 +46,13 @@ public class InvalidLengthException extends CommandException {
 	public int getGivenLength() {
 		return given;
 	}
+
+	boolean isShorter() {
+		return given < expected;
+	}
+
+	boolean isLonger() {
+		return given > expected;
+	}
+
 }
