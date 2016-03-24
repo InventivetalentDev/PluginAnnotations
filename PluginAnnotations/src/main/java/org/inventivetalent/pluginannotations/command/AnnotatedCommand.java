@@ -223,9 +223,9 @@ public class AnnotatedCommand {
 			if (Enum.class.isAssignableFrom(parameterType)) {
 				return Enum.valueOf((Class<? extends Enum>) parameterType, argument.toUpperCase());
 			}
-			throw new ArgumentParseException("Failed to parse argument '" + argument + "' to " + parameterType);
+			throw new ArgumentParseException("Failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
 		} catch (ReflectiveOperationException e) {
-			throw new ArgumentParseException("Exception while parsing argument '" + argument + "' to " + parameterType, e);
+			throw new ArgumentParseException("Exception while parsing argument '" + argument + "' to " + parameterType, e, argument, parameterType);
 		}
 	}
 
