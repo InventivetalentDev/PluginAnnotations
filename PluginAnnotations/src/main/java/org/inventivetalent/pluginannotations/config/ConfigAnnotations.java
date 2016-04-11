@@ -31,12 +31,13 @@ package org.inventivetalent.pluginannotations.config;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.pluginannotations.AnnotationsAbstract;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ConfigAnnotations {
+public class ConfigAnnotations extends AnnotationsAbstract {
 
 	/**
 	 * Load the plugin's configuration values into the class fields
@@ -99,4 +100,8 @@ public class ConfigAnnotations {
 		return this;
 	}
 
+	@Override
+	public void load(Plugin plugin, Object clazz) {
+		loadValues(plugin, clazz);
+	}
 }

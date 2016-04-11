@@ -29,12 +29,13 @@
 package org.inventivetalent.pluginannotations.command;
 
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.pluginannotations.AnnotationsAbstract;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CommandAnnotations {
+public class CommandAnnotations extends AnnotationsAbstract {
 
 	public Set<AnnotatedCommand> registerCommands(Plugin plugin, Object classToRegister) {
 		Class<?> clazz = classToRegister.getClass();
@@ -69,4 +70,8 @@ public class CommandAnnotations {
 		return registeredCommands;
 	}
 
+	@Override
+	public void load(Plugin plugin, Object clazz) {
+		registerCommands(plugin, clazz);
+	}
 }

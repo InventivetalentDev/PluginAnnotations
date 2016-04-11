@@ -29,12 +29,13 @@
 package org.inventivetalent.pluginannotations.message;
 
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.pluginannotations.AnnotationsAbstract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
-public class MessageAnnotations {
+public class MessageAnnotations extends AnnotationsAbstract {
 
 	/**
 	 * Load the plugin's message values into the class fields
@@ -96,4 +97,8 @@ public class MessageAnnotations {
 		return new MessageLoader(plugin, messageFile, basePath, messageFormatter, null);
 	}
 
+	@Override
+	public void load(Plugin plugin, Object clazz) {
+		loadValues(plugin, clazz);
+	}
 }
