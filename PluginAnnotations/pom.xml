@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>pluginannotations</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <name>PluginAnnotations</name>
 
     <build>
@@ -53,6 +53,7 @@
                 <includes>
                     <include>plugin.yml</include>
                     <include>config.yml</include>
+                    <include>META-INF/services/**</include>
                 </includes>
             </resource>
         </resources>
@@ -63,6 +64,7 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>

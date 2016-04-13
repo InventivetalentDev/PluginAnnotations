@@ -33,7 +33,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.SOURCE) @Target(ElementType.TYPE) public @interface Plugin {
+/**
+ * Place this annotation on your plugin's main class. It will automatically generate a plugin.yml file in your jar-package.
+ * <p>
+ * You can also create a separate plugin.yml file, which will be used as a template (For example if you want to use maven placeholders in it)
+ */
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.TYPE)
+public @interface Plugin {
 
 	/**
 	 * @return The plugin's name
