@@ -29,8 +29,6 @@
 package org.inventivetalent.pluginannotations.description;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
@@ -38,7 +36,6 @@ import java.lang.annotation.Target;
  * <p>
  * You can also create a separate plugin.yml file, which will be used as a template (For example if you want to use maven placeholders in it)
  */
-@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface Plugin {
 
