@@ -41,7 +41,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -396,7 +395,13 @@ public class AnnotatedCommand {
 		if (this.usage != null) { command.setUsage(this.usage); }
 		if (this.permission != null) { command.setPermission(this.permission); }
 		if (this.permissionMessage != null) { command.setPermissionMessage(this.permissionMessage); }
-		if (this.aliases.length != 0) { command.setAliases(new ArrayList<>(Arrays.asList(this.aliases))); }
+		if (this.aliases.length != 0) {
+			List<String> aliasList = new ArrayList<>();
+			for (String s : this.aliases) {
+				aliasList.add(s.toLowerCase());
+			}
+			command.setAliases(aliasList);
+		}
 		getCommandMap().register(this.fallbackPrefix != null ? this.fallbackPrefix : "", command);
 		return command.executor = this;
 	}
