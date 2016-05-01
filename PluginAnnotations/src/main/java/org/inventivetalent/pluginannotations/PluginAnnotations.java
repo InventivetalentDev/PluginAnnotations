@@ -39,7 +39,7 @@ public class PluginAnnotations {
 	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
 	public static final CommandAnnotations COMMAND = new CommandAnnotations();
 
-	public static final AnnotationsAbstract[] ALL_ANNOTATIONS =  {
+	public static final AnnotationsAbstract[] ALL_ANNOTATIONS = {
 			CONFIG,
 			MESSAGE,
 			COMMAND };

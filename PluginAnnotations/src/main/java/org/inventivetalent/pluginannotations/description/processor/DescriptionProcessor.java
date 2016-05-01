@@ -53,7 +53,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@SupportedAnnotationTypes({ "org.inventivetalent.pluginannotations.description.*" }) @SupportedSourceVersion(SourceVersion.RELEASE_7) public class DescriptionProcessor extends AbstractProcessor {
+@SupportedAnnotationTypes({ "org.inventivetalent.pluginannotations.description.*" })
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
+public class DescriptionProcessor extends AbstractProcessor {
 
 	final SimpleDateFormat    simpleDateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
 	final Map<String, Object> yamlMap          = new HashMap<>();
@@ -107,12 +109,12 @@ import java.util.Set;
 		}//// @Load - End
 
 		{//// @Author - Start
-//			appendAnnotation("authors", mainTypeElement, "value", new String[0], Author.class, String[].class);
+			//			appendAnnotation("authors", mainTypeElement, "value", new String[0], Author.class, String[].class);
 			String[] authors = getAnnotationValue(mainTypeElement, "value", Author.class, String[].class);
 			if (authors != null && authors.length > 0) {
 				if (authors.length == 1) {
 					yamlMap.put("author", authors[0]);
-				}else{
+				} else {
 					yamlMap.put("authors", authors);
 				}
 			}
@@ -127,7 +129,7 @@ import java.util.Set;
 		}//// @Database - End
 
 		{//// @Depend - Start
-//			appendAnnotation("depend", mainTypeElement, "value", new String[0], Depend.class, String[].class);
+			//			appendAnnotation("depend", mainTypeElement, "value", new String[0], Depend.class, String[].class);
 			String[] depend = getAnnotationValue(mainTypeElement, "value", Depend.class, String[].class);
 			if (depend != null && depend.length > 0) {
 				yamlMap.put("depend", depend);
@@ -135,7 +137,7 @@ import java.util.Set;
 		}//// @Depend - End
 
 		{//// @SoftDepend - Start
-//			appendAnnotation("softdepend", mainTypeElement, "value", new String[0], SoftDepend.class, String[].class);
+			//			appendAnnotation("softdepend", mainTypeElement, "value", new String[0], SoftDepend.class, String[].class);
 			String[] softdepend = getAnnotationValue(mainTypeElement, "value", SoftDepend.class, String[].class);
 			if (softdepend != null && softdepend.length > 0) {
 				yamlMap.put("softdepend", softdepend);
@@ -143,7 +145,7 @@ import java.util.Set;
 		}//// @SoftDepend - End
 
 		{//// @LoadBefore - Start
-//			appendAnnotation("loadbefore", mainTypeElement, "value", new String[0], LoadBefore.class, String[].class);
+			//			appendAnnotation("loadbefore", mainTypeElement, "value", new String[0], LoadBefore.class, String[].class);
 			String[] loadbefore = getAnnotationValue(mainTypeElement, "value", LoadBefore.class, String[].class);
 			if (loadbefore != null && loadbefore.length > 0) {
 				yamlMap.put("loadbefore", loadbefore);

@@ -61,6 +61,7 @@ public class AnnotatedCommand {
 	public String   description       = "";
 	public String   permission        = "";
 	public String   permissionMessage = "";
+	public String   fallbackPrefix    = "";
 
 	private BukkitCommand theCommand;
 
@@ -80,6 +81,7 @@ public class AnnotatedCommand {
 		this.aliases = commandAnnotation.aliases();
 		this.usage = commandAnnotation.usage();
 		this.description = commandAnnotation.description();
+		this.fallbackPrefix = commandAnnotation.fallbackPrefix();
 		if (commandAnnotation.errorHandler() != null) {
 			try {
 				this.errorHandler = commandAnnotation.errorHandler().newInstance();
@@ -395,7 +397,7 @@ public class AnnotatedCommand {
 		if (this.permission != null) { command.setPermission(this.permission); }
 		if (this.permissionMessage != null) { command.setPermissionMessage(this.permissionMessage); }
 		if (this.aliases.length != 0) { command.setAliases(new ArrayList<>(Arrays.asList(this.aliases))); }
-		getCommandMap().register("", command);
+		getCommandMap().register(this.fallbackPrefix != null ? this.fallbackPrefix : "", command);
 		return command.executor = this;
 	}
 

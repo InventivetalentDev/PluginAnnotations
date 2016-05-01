@@ -33,7 +33,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD) public @interface Command {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Command {
 
 	/**
 	 * Name of the command. If left empty, the method name is used
@@ -63,6 +65,8 @@ import java.lang.annotation.Target;
 	//	 * Whether to allow the console (non-players) as the command sender
 	//	 */
 	//	boolean allowConsole() default true;
+
+	String fallbackPrefix() default "";
 
 	Class<? extends CommandErrorHandler> errorHandler() default FeedbackErrorHandler.class;
 
