@@ -80,18 +80,9 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.mcstats.*</include>
                                     <include>org.inventivetalent:pluginannotations**</include>
-                                    <include>lombok:**</include>
-                                    <include>org.javassist:javassist**</include>
                                 </includes>
                             </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.mcstats</pattern>
-                                    <shadedPattern>org.inventivetalent.pluginannotations.mcstats</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -122,12 +113,6 @@
             <artifactId>craftbukkit</artifactId>
             <version>1.9.4-R0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics-lite</artifactId>
-            <version>R8-SNAPSHOT</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.inventivetalent</groupId>
