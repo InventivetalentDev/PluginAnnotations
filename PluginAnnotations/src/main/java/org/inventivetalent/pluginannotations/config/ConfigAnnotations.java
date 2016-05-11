@@ -44,6 +44,7 @@ public class ConfigAnnotations extends AnnotationsAbstract {
 	 *
 	 * @param plugin        {@link Plugin} to load the configuration form
 	 * @param classesToLoad Array of classes to set the fields in
+	 * @return {@link ConfigAnnotations}
 	 */
 	public ConfigAnnotations loadValues(Plugin plugin, Object... classesToLoad) {
 		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
@@ -59,6 +60,7 @@ public class ConfigAnnotations extends AnnotationsAbstract {
 	 *
 	 * @param plugin      {@link Plugin} to load the configuration form
 	 * @param classToLoad Class to set the fields in
+	 * @return {@link ConfigAnnotations}
 	 */
 	public ConfigAnnotations loadValues(Plugin plugin, Object classToLoad) {
 		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }

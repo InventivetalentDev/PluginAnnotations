@@ -316,8 +316,8 @@ public class AnnotatedCommand {
 		}
 	}
 
-	/**
-	 * @author D4rKDeagle
+	/*
+	 * Author: D4rKDeagle
 	 */
 	public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilities) {
 		final String argumentToFindCompletionFor = args[args.length - 1];

@@ -37,6 +37,7 @@ import java.lang.annotation.Target;
 
 	/**
 	 * Name of the command. If empty, the method name will be used
+	 * @return command name
 	 */
 	String name() default "";
 

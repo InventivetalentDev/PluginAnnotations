@@ -37,6 +37,7 @@ import java.lang.annotation.Target;
 
 	/**
 	 * Joiner for the arguments. Defaults to <code>" "</code>
+	 * @return joiner
 	 */
 	String joiner() default " ";
 

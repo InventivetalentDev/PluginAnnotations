@@ -42,6 +42,7 @@ public class MessageAnnotations extends AnnotationsAbstract {
 	 *
 	 * @param plugin        {@link Plugin} to load the messages form
 	 * @param classesToLoad Array of classes to set the fields in
+	 * @return {@link MessageAnnotations}
 	 */
 	public MessageAnnotations loadValues(Plugin plugin, Object... classesToLoad) {
 		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
@@ -57,6 +58,7 @@ public class MessageAnnotations extends AnnotationsAbstract {
 	 *
 	 * @param plugin      {@link Plugin} to load the messages form
 	 * @param classToLoad Class to set the fields in
+	 * @return {@link MessageAnnotations}
 	 */
 	public MessageAnnotations loadValues(Plugin plugin, Object classToLoad) {
 		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }

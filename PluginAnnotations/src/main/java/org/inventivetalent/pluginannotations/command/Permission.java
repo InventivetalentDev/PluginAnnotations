@@ -37,6 +37,7 @@ import java.lang.annotation.Target;
 
 	/**
 	 * Permission of the command
+	 * @return  permission
 	 */
 	String value();
 
