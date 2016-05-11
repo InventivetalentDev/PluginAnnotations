@@ -4,7 +4,7 @@
   <groupId>org.inventivetalent</groupId>
   <artifactId>pluginannotations</artifactId>
   <name>PluginAnnotations</name>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -99,19 +99,19 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
+      <version>1.9.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
+      <version>1.9.4-R0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.inventivetalent</groupId>
       <artifactId>reflectionhelper</artifactId>
-      <version>[1.4.0,)</version>
+      <version>[1.5.0,)</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
