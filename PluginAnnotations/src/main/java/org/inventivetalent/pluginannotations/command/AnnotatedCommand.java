@@ -38,6 +38,7 @@ import org.inventivetalent.pluginannotations.command.exception.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -345,6 +346,13 @@ public class AnnotatedCommand {
 		try {
 			if (String.class.isAssignableFrom(parameterType)) {
 				return argument;
+			}
+			try {
+				Constructor stringConstructor = parameterType.getConstructor(String.class);
+				if (stringConstructor != null) {
+					return stringConstructor.newInstance(argument);
+				}
+			} catch (NoSuchMethodException ignored) {
 			}
 			if (Number.class.isAssignableFrom(parameterType)) {
 				String parseName = parameterType.getSimpleName();
