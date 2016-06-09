@@ -191,6 +191,14 @@ public class AnnotatedCommand {
 			} /*else {
 				throw illegalSenderException;
 			}*/
+		} catch (NumberFormatException formatException) {
+			ArgumentParseException wrappedException = new ArgumentParseException("Invalid Number", formatException);
+			if (errorHandler != null) {
+				errorHandler.handleArgumentParse(wrappedException, sender, command, args);
+				return false;
+			} else {
+				throw wrappedException;
+			}
 		} catch (ArgumentParseException parseException) {
 			if (errorHandler != null) {
 				errorHandler.handleArgumentParse(parseException, sender, command, args);
