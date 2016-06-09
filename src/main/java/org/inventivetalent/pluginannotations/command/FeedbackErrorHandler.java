@@ -65,6 +65,5 @@ public class FeedbackErrorHandler extends CommandErrorHandler {
 	@Override
 	public void handleArgumentParse(ArgumentParseException exception, CommandSender sender, Command command, String[] args) {
 		sender.sendMessage(ChatColor.RED + exception.getMessage());
-		throw exception;
 	}
 }
