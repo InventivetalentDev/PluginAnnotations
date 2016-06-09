@@ -177,52 +177,40 @@ public class AnnotatedCommand {
 			}
 
 			return true;
-		} catch (PermissionException permissionException)
-
-		{
+		} catch (PermissionException permissionException) {
 			if (errorHandler != null) {
 				errorHandler.handlePermissionException(permissionException, sender, command, args);
 				return false;
 			} else {
 				throw permissionException;
 			}
-		} catch (IllegalSenderException illegalSenderException)
-
-		{
+		} catch (IllegalSenderException illegalSenderException) {
 			if (errorHandler != null) {
 				errorHandler.handleIllegalSender(illegalSenderException, sender, command, args);
 				return false;
 			} /*else {
 				throw illegalSenderException;
 			}*/
-		} catch (ArgumentParseException parseException)
-
-		{
+		} catch (ArgumentParseException parseException) {
 			if (errorHandler != null) {
 				errorHandler.handleArgumentParse(parseException, sender, command, args);
 				return false;
 			} else {
 				throw parseException;
 			}
-		} catch (InvalidLengthException lengthException)
-
-		{
+		} catch (InvalidLengthException lengthException) {
 			if (errorHandler != null) {
 				errorHandler.handleLength(lengthException, sender, command, args);
 				return false;
 			} else {
 				throw lengthException;
 			}
-		} catch (UnhandledCommandException unhandledException)
-
-		{
+		} catch (UnhandledCommandException unhandledException) {
 			if (errorHandler != null) {
 				errorHandler.handleUnhandled(unhandledException, sender, command, args);
 			}
 			throw unhandledException;
-		} catch (CommandException commandException)
-
-		{
+		} catch (CommandException commandException) {
 			if (errorHandler != null) {
 				errorHandler.handleCommandException(commandException, sender, command, args);
 				return false;
