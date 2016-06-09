@@ -191,14 +191,6 @@ public class AnnotatedCommand {
 			} /*else {
 				throw illegalSenderException;
 			}*/
-		} catch (NumberFormatException formatException) {
-			ArgumentParseException wrappedException = new ArgumentParseException("Invalid Number", formatException);
-			if (errorHandler != null) {
-				errorHandler.handleArgumentParse(wrappedException, sender, command, args);
-				return false;
-			} else {
-				throw wrappedException;
-			}
 		} catch (ArgumentParseException parseException) {
 			if (errorHandler != null) {
 				errorHandler.handleArgumentParse(parseException, sender, command, args);
@@ -366,6 +358,12 @@ public class AnnotatedCommand {
 			}
 			throw new ArgumentParseException("Failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
 		} catch (ReflectiveOperationException e) {
+			if (e instanceof InvocationTargetException) {
+				Throwable cause = e.getCause();
+				if (cause instanceof NumberFormatException) {
+					throw new ArgumentParseException("Could not parse number " + argument, argument, parameterType);
+				}
+			}
 			throw new ArgumentParseException("Exception while parsing argument '" + argument + "' to " + parameterType, e, argument, parameterType);
 		}
 	}
