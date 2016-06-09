@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>pluginannotations</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <name>PluginAnnotations</name>
 
     <build>
