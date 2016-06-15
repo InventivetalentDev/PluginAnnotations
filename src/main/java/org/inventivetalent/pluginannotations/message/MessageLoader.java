@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 
 public class MessageLoader {
 
-	public static final Pattern LINK_PATTERN = Pattern.compile("\\$\\{(.*)\\}");
+	public static final Pattern LINK_PATTERN = Pattern.compile("\\$\\{([^\\}]*)\\}");
 
 	private final Plugin            plugin;
 	private final FileConfiguration configuration;
