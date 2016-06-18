@@ -113,13 +113,6 @@
             <artifactId>craftbukkit</artifactId>
             <version>1.9.4-R0.1-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.inventivetalent</groupId>
-            <artifactId>reflectionhelper</artifactId>
-            <version>[1.7.1,)</version>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
