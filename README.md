@@ -1,6 +1,6 @@
 # PluginAnnotations
 
-[![Build Status](http://ci.inventivetalent.org/job/PluginAnnotations/badge/icon)](https://ci.inventivetalent.org/job/PluginAnnotations)
+[![Build Status](https://travis-ci.org/InventivetalentDev/PluginAnnotations.svg?branch=master)](https://travis-ci.org/InventivetalentDev/PluginAnnotations)
 
 Annotations to simplify the creation of Spigot plugins
 
