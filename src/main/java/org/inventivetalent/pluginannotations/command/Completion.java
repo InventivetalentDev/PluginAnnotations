@@ -33,10 +33,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD) public @interface Completion {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Completion {
 
 	/**
 	 * Name of the command. If empty, the method name will be used
+	 *
 	 * @return command name
 	 */
 	String name() default "";

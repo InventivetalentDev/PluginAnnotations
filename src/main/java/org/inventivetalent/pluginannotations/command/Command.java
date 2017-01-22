@@ -39,12 +39,14 @@ public @interface Command {
 
 	/**
 	 * Name of the command. If left empty, the method name is used
+	 *
 	 * @return command name
 	 */
 	String name() default "";
 
 	/**
 	 * Command aliases
+	 *
 	 * @return aliases
 	 */
 	String[] aliases() default {};
@@ -61,12 +63,14 @@ public @interface Command {
 
 	/**
 	 * Minimum argument length
+	 *
 	 * @return min argument length
 	 */
 	int min() default 0;
 
 	/**
 	 * Maximum argument length (-1 for no limitation)
+	 *
 	 * @return max argument length
 	 */
 	int max() default -1;

@@ -33,8 +33,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,11 +47,11 @@ public class MessageLoader {
 	private final MessageBase       baseAnnotation;
 	private final MessageFormatter  baseFormatter;
 
-	MessageLoader(@Nonnull Plugin plugin, @Nullable MessageBase baseAnnotation) throws InstantiationException, IllegalAccessException {
+	MessageLoader(Plugin plugin, MessageBase baseAnnotation) throws InstantiationException, IllegalAccessException {
 		this(plugin, baseAnnotation != null ? baseAnnotation.file() : null, baseAnnotation != null ? baseAnnotation.basePath() : "", baseAnnotation != null && baseAnnotation.formatter() != null ? baseAnnotation.formatter().newInstance() : null, baseAnnotation);
 	}
 
-	MessageLoader(@Nonnull Plugin plugin, @Nullable String messageFile, @Nullable String basePath, @Nullable MessageFormatter baseFormatter, @Nullable MessageBase baseAnnotation) {
+	MessageLoader(Plugin plugin, String messageFile, String basePath, MessageFormatter baseFormatter, MessageBase baseAnnotation) {
 		this.plugin = plugin;
 		if (messageFile == null || messageFile.isEmpty() || "config.yml".equals(messageFile)) {
 			this.configuration = plugin.getConfig();
@@ -67,8 +65,7 @@ public class MessageLoader {
 		this.baseAnnotation = baseAnnotation;
 	}
 
-	@Nullable
-	public String getMessage(@Nonnull MessageValue annotation) {
+	public String getMessage(MessageValue annotation) {
 		String key = makeKey(annotation.path());
 		try {
 			return getMessage(key, annotation.defaultsTo(), annotation.allowLinks(), annotation.colorChar(), annotation.formatter());
@@ -77,13 +74,11 @@ public class MessageLoader {
 		}
 	}
 
-	@Nullable
-	public String getMessage(@Nonnull String key, @Nullable String def, boolean allowLinks, char colorChar, @Nullable Class<? extends MessageFormatter> formatter) throws InstantiationException, IllegalAccessException {
+	public String getMessage(String key, String def, boolean allowLinks, char colorChar, Class<? extends MessageFormatter> formatter) throws InstantiationException, IllegalAccessException {
 		return getMessage(key, def, allowLinks, colorChar, formatter != null ? formatter.newInstance() : null);
 	}
 
-	@Nullable
-	public String getMessage(@Nonnull String key, @Nullable String def, boolean allowLinks, char colorChar, @Nullable MessageFormatter formatter) {
+	public String getMessage(String key, String def, boolean allowLinks, char colorChar, MessageFormatter formatter) {
 		key = makeKey(key);
 		if (configuration.contains(key)) {
 			String message = getMessage0(key, def == null || def.isEmpty() ? null : def);
@@ -105,25 +100,23 @@ public class MessageLoader {
 		return null;
 	}
 
-	public String getMessage(@Nonnull String key, @Nullable String def, @Nullable MessageFormatter formatter) {
+	public String getMessage(String key, String def, MessageFormatter formatter) {
 		return getMessage(key, def, true, '&', formatter);
 	}
 
-	public String getMessage(@Nonnull String key, @Nullable String def) {
+	public String getMessage(String key, String def) {
 		return getMessage(key, def, true, '&', (MessageFormatter) null);
 	}
 
-	protected String getMessage0(@Nonnull String key, @Nullable String def) {
+	protected String getMessage0(String key, String def) {
 		return def != null ? configuration.getString(key, def) : configuration.getString(key);
 	}
 
-	@Nonnull
-	public String makeKey(@Nonnull String key) {
+	public String makeKey(String key) {
 		return basePath + (basePath.endsWith(".") ? "" : ".") + key;
 	}
 
-	@Nonnull
-	String replaceLinks(@Nonnull String message) {
+	String replaceLinks(String message) {
 		Matcher matcher = LINK_PATTERN.matcher(message);
 		while (matcher.find()) {
 			if (matcher.groupCount() != 1) { continue; }

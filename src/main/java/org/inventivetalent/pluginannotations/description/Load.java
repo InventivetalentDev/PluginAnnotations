@@ -33,7 +33,8 @@ import org.bukkit.plugin.PluginLoadOrder;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE) public @interface Load {
+@Target(ElementType.TYPE)
+public @interface Load {
 
 	/**
 	 * Defaults to {@link PluginLoadOrder#POSTWORLD}

@@ -31,8 +31,6 @@ package org.inventivetalent.pluginannotations.message;
 import org.bukkit.plugin.Plugin;
 import org.inventivetalent.pluginannotations.AnnotationsAbstract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 public class MessageAnnotations extends AnnotationsAbstract {
@@ -91,11 +89,11 @@ public class MessageAnnotations extends AnnotationsAbstract {
 		return this;
 	}
 
-	public MessageLoader newMessageLoader(@Nonnull Plugin plugin) {
+	public MessageLoader newMessageLoader(Plugin plugin) {
 		return new MessageLoader(plugin, null, null, null, null);
 	}
 
-	public MessageLoader newMessageLoader(@Nonnull Plugin plugin, @Nullable String messageFile, @Nullable String basePath, @Nullable MessageFormatter messageFormatter) {
+	public MessageLoader newMessageLoader(Plugin plugin, String messageFile, String basePath, MessageFormatter messageFormatter) {
 		return new MessageLoader(plugin, messageFile, basePath, messageFormatter, null);
 	}
 

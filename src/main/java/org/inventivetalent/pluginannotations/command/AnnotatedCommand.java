@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
 import org.inventivetalent.pluginannotations.AccessUtil;
 import org.inventivetalent.pluginannotations.command.exception.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -64,8 +62,10 @@ public class AnnotatedCommand {
 	public String   fallbackPrefix    = "";
 
 	private BukkitCommand theCommand;
+	//Internal register methods and classes
+	private CommandMap commandMap;
 
-	public AnnotatedCommand(@Nonnull Object commandClass, @Nonnull Method commandMethod, @Nonnull Command commandAnnotation, @Nullable Permission permissionAnnotation, @Nullable Method completionMethod, @Nullable Completion completionAnnotation) {
+	public AnnotatedCommand(Object commandClass, Method commandMethod, Command commandAnnotation, Permission permissionAnnotation, Method completionMethod, Completion completionAnnotation) {
 		this.commandClass = commandClass;
 		this.commandMethod = commandMethod;
 		this.commandAnnotation = commandAnnotation;
@@ -100,6 +100,27 @@ public class AnnotatedCommand {
 				this.permissionMessage = permissionAnnotation.permissionMessage();
 			}
 		}
+	}
+
+	/*
+	 * Author: D4rKDeagle
+	 */
+	public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilities) {
+		final String argumentToFindCompletionFor = args[args.length - 1];
+
+		final List<String> listOfPossibleCompletions = new ArrayList<>();
+		for (int i = 0; i < possibilities.length; i++) {
+			try {
+				if (possibilities[i] != null && possibilities[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
+					listOfPossibleCompletions.add(possibilities[i]);
+				}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		Collections.sort(listOfPossibleCompletions);
+
+		return listOfPossibleCompletions;
 	}
 
 	boolean onCommand(CommandSender sender, BukkitCommand command, String label, String[] args) {
@@ -305,27 +326,6 @@ public class AnnotatedCommand {
 		}
 	}
 
-	/*
-	 * Author: D4rKDeagle
-	 */
-	public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilities) {
-		final String argumentToFindCompletionFor = args[args.length - 1];
-
-		final List<String> listOfPossibleCompletions = new ArrayList<>();
-		for (int i = 0; i < possibilities.length; i++) {
-			try {
-				if (possibilities[i] != null && possibilities[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
-					listOfPossibleCompletions.add(possibilities[i]);
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-		Collections.sort(listOfPossibleCompletions);
-
-		return listOfPossibleCompletions;
-	}
-
 	boolean hasPermission(CommandSender sender) {
 		return permissionAnnotation == null || sender.hasPermission(permission);
 	}
@@ -386,9 +386,6 @@ public class AnnotatedCommand {
 		}
 		return newArray;
 	}
-
-	//Internal register methods and classes
-	private CommandMap commandMap;
 
 	public final AnnotatedCommand register() {
 		BukkitCommand command = new BukkitCommand(this.name);
