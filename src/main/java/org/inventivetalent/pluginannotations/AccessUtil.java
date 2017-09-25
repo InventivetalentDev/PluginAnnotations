@@ -5,6 +5,9 @@ import java.lang.reflect.Method;
 
 public class AccessUtil {
 
+	private AccessUtil() {
+	}
+
 	/**
 	 * Set a specified Field accessible
 	 *

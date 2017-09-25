@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AnnotatedCommand {
 
 	private final Object              commandClass;
@@ -33,7 +34,6 @@ public class AnnotatedCommand {
 	public String   permissionMessage = "";
 	public String   fallbackPrefix    = "";
 
-	private BukkitCommand theCommand;
 	//Internal register methods and classes
 	private CommandMap commandMap;
 
@@ -45,7 +45,7 @@ public class AnnotatedCommand {
 		this.completionMethod = completionMethod;
 		this.completionAnnotation = completionAnnotation;
 
-		if (commandAnnotation.name() != null && !commandAnnotation.name().isEmpty()) {
+		if (!commandAnnotation.name().isEmpty()) {
 			this.name = commandAnnotation.name();
 		} else {
 			this.name = commandMethod.getName();
@@ -54,21 +54,17 @@ public class AnnotatedCommand {
 		this.usage = commandAnnotation.usage();
 		this.description = commandAnnotation.description();
 		this.fallbackPrefix = commandAnnotation.fallbackPrefix();
-		if (commandAnnotation.errorHandler() != null) {
-			try {
-				this.errorHandler = commandAnnotation.errorHandler().newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			this.errorHandler = null;
-		}
+		try {
+            this.errorHandler = commandAnnotation.errorHandler().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 		if (permissionAnnotation != null) {
-			if (permissionAnnotation.value() != null && !permissionAnnotation.value().isEmpty()) {
+			if (!permissionAnnotation.value().isEmpty()) {
 				this.permission = permissionAnnotation.value();
 			}
-			if (permissionAnnotation.permissionMessage() != null && !permissionAnnotation.permissionMessage().isEmpty()) {
+			if (!permissionAnnotation.permissionMessage().isEmpty()) {
 				this.permissionMessage = permissionAnnotation.permissionMessage();
 			}
 		}
@@ -81,10 +77,10 @@ public class AnnotatedCommand {
 		final String argumentToFindCompletionFor = args[args.length - 1];
 
 		final List<String> listOfPossibleCompletions = new ArrayList<>();
-		for (int i = 0; i < possibilities.length; i++) {
+		for (String possibility : possibilities) {
 			try {
-				if (possibilities[i] != null && possibilities[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
-					listOfPossibleCompletions.add(possibilities[i]);
+				if (possibility != null && possibility.regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
+					listOfPossibleCompletions.add(possibility);
 				}
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -97,10 +93,10 @@ public class AnnotatedCommand {
 
 	boolean onCommand(CommandSender sender, BukkitCommand command, String label, String[] args) {
 		try {
-			//			//Check sender type
-			//			if (!commandAnnotation.allowConsole()) {
-			//				if (!(sender instanceof Player)) { throw new IllegalSenderException(); }
-			//			}
+			////Check sender type
+			//if (!commandAnnotation.allowConsole()) {
+			//	if (!(sender instanceof Player)) { throw new IllegalSenderException(); }
+			//}
 			//Check permission
 			if (!hasPermission(sender)) {
 				throw new PermissionException(this.permission);
@@ -151,7 +147,7 @@ public class AnnotatedCommand {
 						if (parsedArguments[i] != null) { continue; }
 						OptionalArg optionalAnnotation = getMethodParameterAnnotation(commandMethod, i, OptionalArg.class);
 						if (optionalAnnotation != null) {
-							if (optionalAnnotation.def() != null && !optionalAnnotation.def().isEmpty()) {
+							if (!optionalAnnotation.def().isEmpty()) {
 								parsedArguments[i] = parseArgument(parameterTypes[i], optionalAnnotation.def());
 							}
 						}
@@ -215,6 +211,7 @@ public class AnnotatedCommand {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	<A extends Annotation> A getMethodParameterAnnotation(Method method, int index, Class<A> clazz) {
 		Annotation[] annotations = method.getParameterAnnotations()[index];
 		if (annotations != null) {
@@ -225,6 +222,7 @@ public class AnnotatedCommand {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	<A extends Annotation> A getMethodParameterAnnotation(Method method, Class<A> clazz) {
 		Annotation[][] annotations = method.getParameterAnnotations();
 		for (Annotation[] annotationA : annotations) {
@@ -237,6 +235,7 @@ public class AnnotatedCommand {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	List<String> onTabComplete(CommandSender sender, BukkitCommand command, String label, String[] args) {
 		if (completionAnnotation == null || completionMethod == null) { return null; }
 
@@ -244,9 +243,9 @@ public class AnnotatedCommand {
 			return null;
 		}
 		try {
-			//			if (!List.class.isAssignableFrom(completionMethod.getReturnType())) {
-			//				throw new CommandException("Completion method '" + completionMethod.getName() + " in " + commandClass + " does not return a List");
-			//			}
+			//if (!List.class.isAssignableFrom(completionMethod.getReturnType())) {
+			//	throw new CommandException("Completion method '" + completionMethod.getName() + " in " + commandClass + " does not return a List");
+			//}
 
 			Class<?>[] parameterTypes = completionMethod.getParameterTypes();
 			if (parameterTypes.length <= 1) {
@@ -302,6 +301,7 @@ public class AnnotatedCommand {
 		return permissionAnnotation == null || sender.hasPermission(permission);
 	}
 
+	@SuppressWarnings("unchecked")
 	Object parseArgument(Class<?> parameterType, String argument) {
 		try {
 			if (String.class.isAssignableFrom(parameterType)) {
@@ -353,15 +353,12 @@ public class AnnotatedCommand {
 
 	String[] getLeftoverArguments(String[] args, int start) {
 		String[] newArray = new String[args.length - start];
-		for (int i = start; i < args.length; i++) {
-			newArray[i - start] = args[i];
-		}
+		System.arraycopy(args, start, newArray, 0, args.length - start);
 		return newArray;
 	}
 
 	public final AnnotatedCommand register() {
 		BukkitCommand command = new BukkitCommand(this.name);
-		this.theCommand = command;
 		if (this.description != null) { command.setDescription(this.description); }
 		if (this.usage != null) { command.setUsage(this.usage); }
 		if (this.permission != null) { command.setPermission(this.permission); }
@@ -398,8 +395,7 @@ public class AnnotatedCommand {
 
 		@Override
 		public final boolean execute(CommandSender sender, String label, String[] args) {
-			if (executor != null) { return executor.onCommand(sender, this, label, args); }
-			return false;
+			return executor != null && executor.onCommand(sender, this, label, args);
 		}
 
 		@Override

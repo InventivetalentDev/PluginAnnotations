@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ListIterator;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ConfigAnnotations extends AnnotationsAbstract {
 
 	/**
@@ -34,6 +35,7 @@ public class ConfigAnnotations extends AnnotationsAbstract {
 	 * @param classToLoad Class to set the fields in
 	 * @return {@link ConfigAnnotations}
 	 */
+	@SuppressWarnings("unchecked")
 	public ConfigAnnotations loadValues(Plugin plugin, Object classToLoad) {
 		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
 		if (classToLoad == null) { throw new IllegalArgumentException("class cannot be null"); }

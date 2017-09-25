@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageLoader {
 
 	public static final Pattern LINK_PATTERN = Pattern.compile("\\$\\{([^\\}]*)\\}");
@@ -20,7 +21,7 @@ public class MessageLoader {
 	private final MessageFormatter  baseFormatter;
 
 	MessageLoader(Plugin plugin, MessageBase baseAnnotation) throws InstantiationException, IllegalAccessException {
-		this(plugin, baseAnnotation != null ? baseAnnotation.file() : null, baseAnnotation != null ? baseAnnotation.basePath() : "", baseAnnotation != null && baseAnnotation.formatter() != null ? baseAnnotation.formatter().newInstance() : null, baseAnnotation);
+		this(plugin, baseAnnotation != null ? baseAnnotation.file() : null, baseAnnotation != null ? baseAnnotation.basePath() : "", baseAnnotation != null ? baseAnnotation.formatter().newInstance() : null, baseAnnotation);
 	}
 
 	MessageLoader(Plugin plugin, String messageFile, String basePath, MessageFormatter baseFormatter, MessageBase baseAnnotation) {

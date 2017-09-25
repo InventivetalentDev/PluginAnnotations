@@ -1,5 +1,6 @@
 package org.inventivetalent.pluginannotations.command.exception;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CommandException extends RuntimeException {
 	public CommandException() {
 	}

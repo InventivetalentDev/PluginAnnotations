@@ -5,6 +5,7 @@ import org.inventivetalent.pluginannotations.AnnotationsAbstract;
 
 import java.lang.reflect.Field;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageAnnotations extends AnnotationsAbstract {
 
 	/**

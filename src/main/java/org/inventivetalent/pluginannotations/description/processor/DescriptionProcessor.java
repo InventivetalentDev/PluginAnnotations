@@ -29,10 +29,11 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class DescriptionProcessor extends AbstractProcessor {
 
-	final SimpleDateFormat    simpleDateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
-	final Map<String, Object> yamlMap          = new HashMap<>();
+	private final SimpleDateFormat    simpleDateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
+	private final Map<String, Object> yamlMap          = new HashMap<>();
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		long generateStart = System.currentTimeMillis();
 
@@ -154,11 +155,11 @@ public class DescriptionProcessor extends AbstractProcessor {
 		return true;
 	}
 
-	<A extends Annotation, V> V appendAnnotation(String key, Element element, String valueName, Class<A> annotationClass, Class<V> valueClass) {
+	private <A extends Annotation, V> V appendAnnotation(String key, Element element, String valueName, Class<A> annotationClass, Class<V> valueClass) {
 		return appendAnnotation(key, element, valueName, null, annotationClass, valueClass);
 	}
 
-	<A extends Annotation, V> V appendAnnotation(String key, Element element, String valueName, V defaultValue, Class<A> annotationClass, Class<V> valueClass) {
+	private <A extends Annotation, V> V appendAnnotation(String key, Element element, String valueName, V defaultValue, Class<A> annotationClass, Class<V> valueClass) {
 		V value = getAnnotationValue(element, valueName, annotationClass, valueClass);
 		if (value != null) {
 			yamlMap.put(key, value);
@@ -168,7 +169,7 @@ public class DescriptionProcessor extends AbstractProcessor {
 		return value;
 	}
 
-	<A extends Annotation, V> V getAnnotationValue(Element element, String valueName, Class<A> annotationClass, Class<V> valueClass) {
+	private <A extends Annotation, V> V getAnnotationValue(Element element, String valueName, Class<A> annotationClass, Class<V> valueClass) {
 		Annotation annotation = element.getAnnotation(annotationClass);
 		if (annotation != null) {
 			try {

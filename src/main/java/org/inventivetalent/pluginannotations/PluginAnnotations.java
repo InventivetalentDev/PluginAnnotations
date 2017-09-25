@@ -5,6 +5,7 @@ import org.inventivetalent.pluginannotations.command.CommandAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageAnnotations;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class PluginAnnotations {
 
 	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();

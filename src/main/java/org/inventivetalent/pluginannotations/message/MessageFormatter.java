@@ -1,5 +1,6 @@
 package org.inventivetalent.pluginannotations.message;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageFormatter {
 
 	public static final Class<MessageFormatter> DEFAULT = MessageFormatter.class;

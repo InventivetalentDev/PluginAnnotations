@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CommandAnnotations extends AnnotationsAbstract {
 
 	public Set<AnnotatedCommand> registerCommands(Plugin plugin, Object classToRegister) {
