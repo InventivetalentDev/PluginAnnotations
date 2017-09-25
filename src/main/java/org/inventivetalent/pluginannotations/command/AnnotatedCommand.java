@@ -18,21 +18,21 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AnnotatedCommand {
 
-	private final Object              commandClass;
-	private final Method              commandMethod;
-	private final Command             commandAnnotation;
-	private final Permission          permissionAnnotation;
-	private final Method              completionMethod;
-	private final Completion          completionAnnotation;
+	private final Object commandClass;
+	private final Method commandMethod;
+	private final Command commandAnnotation;
+	private final Permission permissionAnnotation;
+	private final Method completionMethod;
+	private final Completion completionAnnotation;
 	private final CommandErrorHandler errorHandler;
 
-	public String   name              = "";
-	public String[] aliases           = new String[0];
-	public String   usage             = "";
-	public String   description       = "";
-	public String   permission        = "";
-	public String   permissionMessage = "";
-	public String   fallbackPrefix    = "";
+	public String name = "";
+	public String[] aliases = new String[0];
+	public String usage = "";
+	public String description = "";
+	public String permission = "";
+	public String permissionMessage = "";
+	public String fallbackPrefix = "";
 
 	//Internal register methods and classes
 	private CommandMap commandMap;
@@ -55,10 +55,10 @@ public class AnnotatedCommand {
 		this.description = commandAnnotation.description();
 		this.fallbackPrefix = commandAnnotation.fallbackPrefix();
 		try {
-            this.errorHandler = commandAnnotation.errorHandler().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+			this.errorHandler = commandAnnotation.errorHandler().newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		if (permissionAnnotation != null) {
 			if (!permissionAnnotation.value().isEmpty()) {
@@ -118,7 +118,9 @@ public class AnnotatedCommand {
 					throw new CommandException("First parameter of method '" + commandMethod.getName() + " in " + commandClass + " is no CommandSender");
 				}
 				if (Player.class.isAssignableFrom(parameterTypes[0])) {
-					if (!(sender instanceof Player)) { throw new IllegalSenderException(); }
+					if (!(sender instanceof Player)) {
+						throw new IllegalSenderException();
+					}
 				}
 				if ((parameterTypes.length - 1/*Ignore the sender*/ < commandAnnotation.min()) || (commandAnnotation.max() != -1 && parameterTypes.length - 1 > commandAnnotation.max())) {
 					throw new CommandException("Parameter length of method '" + commandMethod.getName() + " in " + commandClass + " is not in the specified argument length range");
@@ -136,7 +138,9 @@ public class AnnotatedCommand {
 							break;
 						}
 					}
-					if (i >= parsedArguments.length) { break; }
+					if (i >= parsedArguments.length) {
+						break;
+					}
 
 					parsedArguments[i] = parseArgument(parameterTypes[i], args[i - 1]);
 				}
@@ -144,7 +148,9 @@ public class AnnotatedCommand {
 
 				if (parameterTypes.length - 1 > args.length) {
 					for (int i = args.length; i < parameterTypes.length; i++) {
-						if (parsedArguments[i] != null) { continue; }
+						if (parsedArguments[i] != null) {
+							continue;
+						}
 						OptionalArg optionalAnnotation = getMethodParameterAnnotation(commandMethod, i, OptionalArg.class);
 						if (optionalAnnotation != null) {
 							if (!optionalAnnotation.def().isEmpty()) {
@@ -157,7 +163,9 @@ public class AnnotatedCommand {
 				commandMethod.invoke(commandClass, parsedArguments);
 			} catch (InvocationTargetException e) {
 				Throwable cause = e.getCause();
-				if (cause instanceof CommandException) { throw (CommandException) cause; }
+				if (cause instanceof CommandException) {
+					throw (CommandException) cause;
+				}
 				throw new UnhandledCommandException("Unhandled exception while invoking command method in " + this.commandClass + "#" + this.commandMethod.getName(), cause);
 			} catch (CommandException commandException) {
 				throw commandException;
@@ -216,7 +224,9 @@ public class AnnotatedCommand {
 		Annotation[] annotations = method.getParameterAnnotations()[index];
 		if (annotations != null) {
 			for (Annotation annotation : annotations) {
-				if (clazz.isAssignableFrom(annotation.getClass())) { return (A) annotation; }
+				if (clazz.isAssignableFrom(annotation.getClass())) {
+					return (A) annotation;
+				}
 			}
 		}
 		return null;
@@ -237,7 +247,9 @@ public class AnnotatedCommand {
 
 	@SuppressWarnings("unchecked")
 	List<String> onTabComplete(CommandSender sender, BukkitCommand command, String label, String[] args) {
-		if (completionAnnotation == null || completionMethod == null) { return null; }
+		if (completionAnnotation == null || completionMethod == null) {
+			return null;
+		}
 
 		if (!hasPermission(sender)) {
 			return null;
@@ -258,7 +270,9 @@ public class AnnotatedCommand {
 				throw new CommandException("Second parameter of method '" + completionMethod.getName() + " in " + completionMethod + " is no CommandSender");
 			}
 			if (Player.class.isAssignableFrom(parameterTypes[0])) {
-				if (!(sender instanceof Player)) { return null; }
+				if (!(sender instanceof Player)) {
+					return null;
+				}
 			}
 
 			Object[] parsedArguments = new Object[parameterTypes.length];
@@ -274,7 +288,9 @@ public class AnnotatedCommand {
 					}
 				}
 
-				if (i >= parsedArguments.length) { break; }
+				if (i >= parsedArguments.length) {
+					break;
+				}
 				if (args[i - 2] == null || args[i - 2].isEmpty()) {
 					parsedArguments[i] = null;
 				} else {
@@ -341,11 +357,15 @@ public class AnnotatedCommand {
 	}
 
 	String joinArguments(String[] args, int start, String joiner) {
-		if (start > args.length) { throw new IllegalArgumentException("start > length"); }
+		if (start > args.length) {
+			throw new IllegalArgumentException("start > length");
+		}
 
 		StringBuilder joined = new StringBuilder();
 		for (int i = start; i < args.length; i++) {
-			if (i != start) { joined.append(joiner); }
+			if (i != start) {
+				joined.append(joiner);
+			}
 			joined.append(args[i]);
 		}
 		return joined.toString();
@@ -359,10 +379,18 @@ public class AnnotatedCommand {
 
 	public final AnnotatedCommand register() {
 		BukkitCommand command = new BukkitCommand(this.name);
-		if (this.description != null) { command.setDescription(this.description); }
-		if (this.usage != null) { command.setUsage(this.usage); }
-		if (this.permission != null) { command.setPermission(this.permission); }
-		if (this.permissionMessage != null) { command.setPermissionMessage(this.permissionMessage); }
+		if (this.description != null) {
+			command.setDescription(this.description);
+		}
+		if (this.usage != null) {
+			command.setUsage(this.usage);
+		}
+		if (this.permission != null) {
+			command.setPermission(this.permission);
+		}
+		if (this.permissionMessage != null) {
+			command.setPermissionMessage(this.permissionMessage);
+		}
 		if (this.aliases.length != 0) {
 			List<String> aliasList = new ArrayList<>();
 			for (String s : this.aliases) {
@@ -400,7 +428,9 @@ public class AnnotatedCommand {
 
 		@Override
 		public final List<String> tabComplete(CommandSender sender, String label, String[] args) throws IllegalArgumentException {
-			if (executor != null) { return executor.onTabComplete(sender, this, label, args); }
+			if (executor != null) {
+				return executor.onTabComplete(sender, this, label, args);
+			}
 			return null;
 		}
 	}

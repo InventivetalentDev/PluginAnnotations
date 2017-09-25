@@ -25,12 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@SupportedAnnotationTypes({ "org.inventivetalent.pluginannotations.description.*" })
+@SupportedAnnotationTypes({"org.inventivetalent.pluginannotations.description.*"})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class DescriptionProcessor extends AbstractProcessor {
 
-	private final SimpleDateFormat    simpleDateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
-	private final Map<String, Object> yamlMap          = new HashMap<>();
+	private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
+	private final Map<String, Object> yamlMap = new HashMap<>();
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -45,7 +45,9 @@ public class DescriptionProcessor extends AbstractProcessor {
 			}
 			mainElement = element;
 		}
-		if (mainElement == null) { return false; }
+		if (mainElement == null) {
+			return false;
+		}
 		if (!(mainElement instanceof TypeElement)) {
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@Plugin is not a TypeElement");
 			return false;

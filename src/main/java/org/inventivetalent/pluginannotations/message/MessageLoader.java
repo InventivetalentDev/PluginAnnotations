@@ -14,11 +14,11 @@ public class MessageLoader {
 
 	public static final Pattern LINK_PATTERN = Pattern.compile("\\$\\{([^\\}]*)\\}");
 
-	private final Plugin            plugin;
+	private final Plugin plugin;
 	private final FileConfiguration configuration;
-	private final String            basePath;
-	private final MessageBase       baseAnnotation;
-	private final MessageFormatter  baseFormatter;
+	private final String basePath;
+	private final MessageBase baseAnnotation;
+	private final MessageFormatter baseFormatter;
 
 	MessageLoader(Plugin plugin, MessageBase baseAnnotation) throws InstantiationException, IllegalAccessException {
 		this(plugin, baseAnnotation != null ? baseAnnotation.file() : null, baseAnnotation != null ? baseAnnotation.basePath() : "", baseAnnotation != null ? baseAnnotation.formatter().newInstance() : null, baseAnnotation);
@@ -30,7 +30,9 @@ public class MessageLoader {
 			this.configuration = plugin.getConfig();
 		} else {
 			File file = new File(messageFile);
-			if (!file.isAbsolute()) { file = new File(plugin.getDataFolder(), messageFile); }
+			if (!file.isAbsolute()) {
+				file = new File(plugin.getDataFolder(), messageFile);
+			}
 			this.configuration = YamlConfiguration.loadConfiguration(file);
 		}
 		this.basePath = basePath == null ? "" : basePath;
@@ -92,7 +94,9 @@ public class MessageLoader {
 	String replaceLinks(String message) {
 		Matcher matcher = LINK_PATTERN.matcher(message);
 		while (matcher.find()) {
-			if (matcher.groupCount() != 1) { continue; }
+			if (matcher.groupCount() != 1) {
+				continue;
+			}
 			String toReplace = matcher.group(0);
 			String key = matcher.group(1);
 

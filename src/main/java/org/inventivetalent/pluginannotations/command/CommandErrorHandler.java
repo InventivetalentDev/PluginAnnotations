@@ -6,7 +6,7 @@ import org.inventivetalent.pluginannotations.command.exception.*;
 
 public class CommandErrorHandler {
 
-	public static final Class<? extends CommandErrorHandler> VOID     = VoidErrorHandler.class;
+	public static final Class<? extends CommandErrorHandler> VOID = VoidErrorHandler.class;
 	public static final Class<? extends CommandErrorHandler> FEEDBACK = FeedbackErrorHandler.class;
 
 	public void handleCommandException(CommandException exception, CommandSender sender, Command command, String[] args) {

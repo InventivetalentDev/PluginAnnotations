@@ -8,14 +8,14 @@ import org.inventivetalent.pluginannotations.message.MessageAnnotations;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class PluginAnnotations {
 
-	public static final ConfigAnnotations  CONFIG  = new ConfigAnnotations();
+	public static final ConfigAnnotations CONFIG = new ConfigAnnotations();
 	public static final MessageAnnotations MESSAGE = new MessageAnnotations();
 	public static final CommandAnnotations COMMAND = new CommandAnnotations();
 
 	public static final AnnotationsAbstract[] ALL_ANNOTATIONS = {
 			CONFIG,
 			MESSAGE,
-			COMMAND };
+			COMMAND};
 
 	public static void loadAll(Plugin plugin, Object classToLoad) {
 		for (AnnotationsAbstract annotation : ALL_ANNOTATIONS) {

@@ -16,8 +16,12 @@ public class MessageAnnotations extends AnnotationsAbstract {
 	 * @return {@link MessageAnnotations}
 	 */
 	public MessageAnnotations loadValues(Plugin plugin, Object... classesToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classesToLoad.length == 0) { throw new IllegalArgumentException("classes cannot be empty"); }
+		if (plugin == null) {
+			throw new IllegalArgumentException("plugin cannot be null");
+		}
+		if (classesToLoad.length == 0) {
+			throw new IllegalArgumentException("classes cannot be empty");
+		}
 		for (Object toLoad : classesToLoad) {
 			loadValues(plugin, toLoad);
 		}
@@ -32,8 +36,12 @@ public class MessageAnnotations extends AnnotationsAbstract {
 	 * @return {@link MessageAnnotations}
 	 */
 	public MessageAnnotations loadValues(Plugin plugin, Object classToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classToLoad == null) { throw new IllegalArgumentException("class cannot be null"); }
+		if (plugin == null) {
+			throw new IllegalArgumentException("plugin cannot be null");
+		}
+		if (classToLoad == null) {
+			throw new IllegalArgumentException("class cannot be null");
+		}
 		Class<?> clazz = classToLoad.getClass();
 		MessageBase baseAnnotation = clazz.getAnnotation(MessageBase.class);
 

@@ -17,7 +17,9 @@ public class CommandAnnotations extends AnnotationsAbstract {
 		Set<Method> completionMethods = new HashSet<>();
 		for (Method method : clazz.getDeclaredMethods()) {
 			Completion completionAnnotation = method.getAnnotation(Completion.class);
-			if (completionAnnotation != null) { completionMethods.add(method); }
+			if (completionAnnotation != null) {
+				completionMethods.add(method);
+			}
 		}
 
 		for (Method method : clazz.getDeclaredMethods()) {
