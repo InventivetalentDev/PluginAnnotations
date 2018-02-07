@@ -5,13 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
+/**
+ * Created by shell on 2017/12/15.
+ * <p>
+ * Github: https://github.com/shellljx
+ */
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigValue {
+public @interface ConfigBean {
 
-    String path() default "";
+    String file() default "config.yml";
 
-    String defaultsTo() default "";
-
-    char colorChar() default ' ';
 }
