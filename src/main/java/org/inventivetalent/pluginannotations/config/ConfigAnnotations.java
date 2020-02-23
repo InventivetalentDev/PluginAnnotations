@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ListIterator;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ConfigAnnotations extends AnnotationsAbstract {
 
 	/**
@@ -19,8 +20,12 @@ public class ConfigAnnotations extends AnnotationsAbstract {
 	 * @return {@link ConfigAnnotations}
 	 */
 	public ConfigAnnotations loadValues(Plugin plugin, Object... classesToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classesToLoad.length == 0) { throw new IllegalArgumentException("classes cannot be empty"); }
+		if (plugin == null) {
+			throw new IllegalArgumentException("plugin cannot be null");
+		}
+		if (classesToLoad.length == 0) {
+			throw new IllegalArgumentException("classes cannot be empty");
+		}
 		for (Object toLoad : classesToLoad) {
 			loadValues(plugin, toLoad);
 		}
@@ -34,9 +39,14 @@ public class ConfigAnnotations extends AnnotationsAbstract {
 	 * @param classToLoad Class to set the fields in
 	 * @return {@link ConfigAnnotations}
 	 */
+	@SuppressWarnings("unchecked")
 	public ConfigAnnotations loadValues(Plugin plugin, Object classToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classToLoad == null) { throw new IllegalArgumentException("class cannot be null"); }
+		if (plugin == null) {
+			throw new IllegalArgumentException("plugin cannot be null");
+		}
+		if (classToLoad == null) {
+			throw new IllegalArgumentException("class cannot be null");
+		}
 		Class<?> clazz = classToLoad.getClass();
 		FileConfiguration config = plugin.getConfig();
 

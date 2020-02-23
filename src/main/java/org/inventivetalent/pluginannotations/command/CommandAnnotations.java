@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CommandAnnotations extends AnnotationsAbstract {
 
 	public Set<AnnotatedCommand> registerCommands(Plugin plugin, Object classToRegister) {
@@ -16,7 +17,9 @@ public class CommandAnnotations extends AnnotationsAbstract {
 		Set<Method> completionMethods = new HashSet<>();
 		for (Method method : clazz.getDeclaredMethods()) {
 			Completion completionAnnotation = method.getAnnotation(Completion.class);
-			if (completionAnnotation != null) { completionMethods.add(method); }
+			if (completionAnnotation != null) {
+				completionMethods.add(method);
+			}
 		}
 
 		for (Method method : clazz.getDeclaredMethods()) {

@@ -1,8 +1,9 @@
 package org.inventivetalent.pluginannotations.command.exception;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ArgumentParseException extends CommandException {
 
-	private String   argument;
+	private String argument;
 	private Class<?> type;
 
 	public ArgumentParseException() {

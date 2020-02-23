@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target({
-				ElementType.METHOD,
-				ElementType.FIELD })
+		ElementType.METHOD,
+		ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MessageValue {
 
