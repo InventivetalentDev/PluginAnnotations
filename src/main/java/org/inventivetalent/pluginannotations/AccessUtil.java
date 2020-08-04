@@ -8,6 +8,9 @@ import java.lang.reflect.Modifier;
 
 public class AccessUtil {
 
+	private static final Object modifiersVarHandle;
+	private static final Field modifiersField;
+	
 	/**
 	 * Set a specified Field accessible
 	 *
@@ -33,9 +36,6 @@ public class AccessUtil {
 		m.setAccessible(true);
 		return m;
 	}
-
-	private static final Object modifiersVarHandle;
-	private static final Field modifiersField;
 
 	private static Object initModifiersVarHandle() {
 		try {
