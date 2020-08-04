@@ -1,10 +1,16 @@
 package org.inventivetalent.pluginannotations;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class AccessUtil {
 
+	private static final Object modifiersVarHandle;
+	private static final Field modifiersField;
+	
 	/**
 	 * Set a specified Field accessible
 	 *
@@ -12,16 +18,11 @@ public class AccessUtil {
 	 */
 	public static Field setAccessible(Field field) throws ReflectiveOperationException {
 		field.setAccessible(true);
-		try {
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
-			modifiersField.setInt(field, field.getModifiers() & 0xFFFFFFEF);
-		} catch (NoSuchFieldException e) {
-			if (e.getCause().getMessage().equals("modifiers")) {
-				System.err.println("Failed to remove final modifier from " + field);
-			} else {
-				throw e;
-			}
+		int newModifiers = field.getModifiers() & ~Modifier.FINAL;
+		if (modifiersVarHandle != null) {
+			((VarHandle) modifiersVarHandle).set(field, newModifiers);
+		} else {
+			modifiersField.setInt(field, newModifiers);
 		}
 		return field;
 	}
@@ -36,4 +37,26 @@ public class AccessUtil {
 		return m;
 	}
 
+	private static Object initModifiersVarHandle() {
+		try {
+			VarHandle.class.getName(); // Makes this method fail-fast on JDK 8
+			return MethodHandles.privateLookupIn(Field.class, MethodHandles.lookup())
+					.findVarHandle(Field.class, "modifiers", int.class);
+		} catch (IllegalAccessException | NoClassDefFoundError | NoSuchFieldException ignored) {}
+		return null;
+	}
+
+	private static Field initModifiersField() {
+		try {
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+			modifiersField.setAccessible(true);
+			return modifiersField;
+		} catch (NoSuchFieldException ignored) {}
+		return null;
+	}
+
+	static {
+		modifiersVarHandle = initModifiersVarHandle();
+		modifiersField = initModifiersField();
+	}
 }
