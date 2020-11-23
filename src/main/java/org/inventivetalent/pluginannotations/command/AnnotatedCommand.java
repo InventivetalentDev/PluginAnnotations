@@ -380,7 +380,7 @@ public class AnnotatedCommand {
 	private CommandMap getCommandMap() {
 		if (commandMap == null) {
 			try {
-				commandMap = (CommandMap) AccessUtil.setAccessible(Bukkit.getServer().getClass().getDeclaredField("commandMap")).get(Bukkit.getServer());
+				commandMap = (CommandMap) AccessUtil.setAccessible(Bukkit.getServer().getClass().getDeclaredField("commandMap"), true).get(Bukkit.getServer());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
