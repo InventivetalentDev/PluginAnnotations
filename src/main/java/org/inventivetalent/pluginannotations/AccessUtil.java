@@ -14,10 +14,14 @@ public class AccessUtil {
 	/**
 	 * Set a specified Field accessible
 	 *
-	 * @param f Field set accessible
+	 * @param field Field to set accessible
+	 * @param readOnly Whether removing final modifier should not be attempted
 	 */
-	public static Field setAccessible(Field field) throws ReflectiveOperationException {
+	public static Field setAccessible(Field field, boolean readOnly) throws ReflectiveOperationException {
 		field.setAccessible(true);
+		if (readOnly) {
+			return field;
+		}
 		int newModifiers = field.getModifiers() & ~Modifier.FINAL;
 		if (modifiersVarHandle != null) {
 			((VarHandle) modifiersVarHandle).set(field, newModifiers);
@@ -25,6 +29,15 @@ public class AccessUtil {
 			modifiersField.setInt(field, newModifiers);
 		}
 		return field;
+	}
+
+	/**
+	 * Set a specified Field accessible
+	 *
+	 * @param field Field to set accessible
+	 */
+	public static Field setAccessible(Field field) throws ReflectiveOperationException {
+		return setAccessible(field, false);
 	}
 
 	/**
