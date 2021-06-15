@@ -1,81 +1,73 @@
 package org.inventivetalent.pluginannotations.config;
 
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.inventivetalent.pluginannotations.AnnotationsAbstract;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.pluginannotations.utils.DataConfigFile;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.ListIterator;
+/**
+ * Created by shell on 2018/1/23.
+ * <p>
+ * Github: https://github.com/shellljx
+ */
+public class ConfigAnnotations {
 
-public class ConfigAnnotations extends AnnotationsAbstract {
+    /**
+     * load config
+     *
+     * @param plugin
+     * @param classToLoad
+     * @param <T>
+     * @return
+     */
+    public <T> T loadValues(JavaPlugin plugin, Class<T> classToLoad) {
+        return loadValues(plugin, null, classToLoad);
+    }
 
-	/**
-	 * Load the plugin's configuration values into the class fields
-	 *
-	 * @param plugin        {@link Plugin} to load the configuration form
-	 * @param classesToLoad Array of classes to set the fields in
-	 * @return {@link ConfigAnnotations}
-	 */
-	public ConfigAnnotations loadValues(Plugin plugin, Object... classesToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classesToLoad.length == 0) { throw new IllegalArgumentException("classes cannot be empty"); }
-		for (Object toLoad : classesToLoad) {
-			loadValues(plugin, toLoad);
-		}
-		return this;
-	}
+    /**
+     * load config
+     *
+     * @param plugin
+     * @param configFilePath
+     * @param classToLoad
+     * @param <T>
+     * @return
+     */
+    public <T> T loadValues(JavaPlugin plugin, String configFilePath, Class<T> classToLoad) {
+        AnnotationInterpreter interpreter = new BeanInterpreter();
+        return interpreter.decodeFromYml(initConfig(plugin, configFilePath, classToLoad).getConfig(), classToLoad);
+    }
 
-	/**
-	 * Load the plugin's configuration values into the class fields
-	 *
-	 * @param plugin      {@link Plugin} to load the configuration form
-	 * @param classToLoad Class to set the fields in
-	 * @return {@link ConfigAnnotations}
-	 */
-	public ConfigAnnotations loadValues(Plugin plugin, Object classToLoad) {
-		if (plugin == null) { throw new IllegalArgumentException("plugin cannot be null"); }
-		if (classToLoad == null) { throw new IllegalArgumentException("class cannot be null"); }
-		Class<?> clazz = classToLoad.getClass();
-		FileConfiguration config = plugin.getConfig();
+    /**
+     * save object to config
+     *
+     * @param plugin
+     * @param targetToSave
+     */
+    public void saveValues(JavaPlugin plugin, Object targetToSave) {
+        saveValues(plugin, null, targetToSave);
+    }
 
-		for (Field field : clazz.getDeclaredFields()) {
-			try {
-				ConfigValue annotation = field.getAnnotation(ConfigValue.class);
-				if (annotation != null) {
-					field.setAccessible(true);
-					if (config.contains(annotation.path())) {
-						Object value = config.get(annotation.path());
-						if (annotation.colorChar() != ' ') {
-							if (value instanceof String) {
-								value = ChatColor.translateAlternateColorCodes(annotation.colorChar(), (String) value);
-							}
-							if (value instanceof List) {
-								for (ListIterator iterator = ((List) value).listIterator(); iterator.hasNext(); ) {
-									Object next = iterator.next();
-									if (next instanceof String) {
-										iterator.set(ChatColor.translateAlternateColorCodes(annotation.colorChar(), (String) next));
-									}
-								}
-							}
-						}
-						field.set(classToLoad, value);
-					} else if (!annotation.defaultsTo().isEmpty()) {
-						//TODO: Parse value type
-						field.set(classToLoad, annotation.defaultsTo());
-					}
-				}
-			} catch (Exception e) {
-				throw new RuntimeException("Failed to set config value for field '" + field.getName() + "' in " + clazz, e);
-			}
-		}
+    /**
+     * save object to config
+     *
+     * @param plugin
+     * @param configFilePath
+     * @param targetTosave
+     */
+    public void saveValues(JavaPlugin plugin, String configFilePath, Object targetTosave) {
+        AnnotationInterpreter interpreter = new BeanInterpreter();
+        DataConfigFile configuration = initConfig(plugin,configFilePath,targetTosave.getClass());
+        interpreter.encodeToYml(configuration.getConfig(),targetTosave);
+        configuration.saveConfig();
+    }
 
-		return this;
-	}
-
-	@Override
-	public void load(Plugin plugin, Object clazz) {
-		loadValues(plugin, clazz);
-	}
+    private <T> DataConfigFile initConfig(JavaPlugin plugin, String configFilePath, Class<T> classz) {
+        String configFileName;
+        if (configFilePath != null) {
+            configFileName = configFilePath;
+        } else {
+            ConfigBean configBean = classz.getAnnotation(ConfigBean.class);
+            configFileName = configBean.file();
+        }
+        return new DataConfigFile(plugin, configFileName);
+    }
 }
