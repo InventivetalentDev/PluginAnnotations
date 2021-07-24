@@ -1,6 +1,6 @@
 # PluginAnnotations
 
-[![Build Status](https://travis-ci.org/InventivetalentDev/PluginAnnotations.svg?branch=master)](https://travis-ci.org/InventivetalentDev/PluginAnnotations)
+[![Build Status](https://travis-ci.com/InventivetalentDev/PluginAnnotations.svg?branch=master)](https://travis-ci.com/InventivetalentDev/PluginAnnotations)
 [![GitHub release](https://img.shields.io/github/release/InventivetalentDev/PluginAnnotations.svg)](https://github.com/InventivetalentDev/PluginAnnotations/releases/latest)
 
 
